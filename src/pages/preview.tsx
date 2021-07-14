@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { PageComponent } from "./[...pageUri]";
 import type { Page, Post } from "@faustjs/core";
 import { PostComponent } from "./posts/[postSlug]";
-import { client } from 'client';
+import { client } from "client";
 
 export default function Preview() {
   const {
@@ -21,8 +21,8 @@ export default function Preview() {
   }
 
   if (isPage) {
-    return <PageComponent page={postOrPage as Page} />;
+    return <PageComponent page={postOrPage as any} />;
   }
 
-  return <PostComponent post={postOrPage as Post} />;
+  return <PostComponent post={postOrPage as any} />;
 }

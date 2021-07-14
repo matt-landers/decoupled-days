@@ -3,7 +3,6 @@ import Head from "next/head";
 import React from "react";
 import { client } from "client";
 import styles from "scss/pages/team.module.scss";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Team = () => {
