@@ -1,11 +1,11 @@
-import { getNextStaticProps } from '@faustjs/next';
+import { getNextStaticProps } from "@faustjs/next";
 
-import { GetStaticPropsContext } from 'next';
-import Head from 'next/head';
-import React from 'react';
-import { CTA, Footer, Header, Hero, Posts } from 'components';
-import styles from 'scss/pages/home.module.scss';
-import { client } from 'client';
+import { GetStaticPropsContext } from "next";
+import Head from "next/head";
+import React from "react";
+import { CTA, Footer, Header, Hero, Posts } from "components";
+import styles from "scss/pages/home.module.scss";
+import { client } from "client";
 
 export default function Page() {
   const { usePosts, useQuery } = client;
@@ -13,7 +13,7 @@ export default function Page() {
   const posts = usePosts({
     first: 6,
     where: {
-      categoryName: 'uncategorized',
+      categoryName: "uncategorized",
     },
   });
 
@@ -38,14 +38,15 @@ export default function Page() {
           button2Text="Headless on GitHub"
           button2URL="https://github.com/wpengine/headless-framework"
           bgImage="/images/headless_hero_background.jpg"
-          id={styles.home_hero}>
+          id={styles.home_hero}
+        >
           <p>
             WP&nbsp;Engine’s Headless WordPress Framework includes this example
-            project, the{' '}
+            project, the{" "}
             <a href="https://github.com/wpengine/headless-framework#plugin-features">
               headless WordPress plugin
             </a>
-            ,{' '}
+            ,{" "}
             <a href="https://github.com/wpengine/headless-framework">
               headless packages
             </a>
@@ -53,61 +54,6 @@ export default function Page() {
             make building headless WordPress sites fast and fun.
           </p>
         </Hero>
-        <section className={styles.explore}>
-          <div className="wrap">
-            <h2>Explore this Example Project</h2>
-            <p>
-              This headless example project uses{' '}
-              <a href="https://nextjs.org/">Next.js</a>,{' '}
-              <a href="https://graphql.org/">GraphQL</a>,{' '}
-              <a href="https://gqless.com">GQless</a> and the{' '}
-              <a href="https://github.com/wpengine/headless-framework">
-                WP&nbsp;Engine headless packages
-              </a>{' '}
-              for WordPress integration. Dive in and edit this template at{' '}
-              <code>src/pages/index.tsx</code> or discover more below.
-            </p>
-            <div className={styles.features}>
-              <div className={styles.feature}>
-                <h3>Global Styles and Fonts</h3>
-                <p>
-                  Add styles to load on every page, such as typography and
-                  layout rules, in <code>src/scss/main.scss</code>. The project
-                  adds{' '}
-                  <a href="https://necolas.github.io/normalize.css/">
-                    normalize.css
-                  </a>{' '}
-                  in <code>src/pages/_app.tsx</code>. Google Fonts are enqueued
-                  in <code>src/pages/_document.tsx</code>.
-                </p>
-              </div>
-
-              <div className={styles.feature}>
-                <h3>Components</h3>
-                <p>
-                  Add or edit components in the <code>src/components</code>{' '}
-                  folder. Find component styles at{' '}
-                  <code>src/scss/components</code>, which use{' '}
-                  <a href="https://nextjs.org/docs/basic-features/built-in-css-support#adding-component-level-css">
-                    CSS modules
-                  </a>{' '}
-                  to scope CSS to each component.
-                </p>
-              </div>
-
-              <div className={styles.feature}>
-                <h3>Hooks</h3>
-                <p>
-                  Fetch data from WordPress with <code>usePost</code>,{' '}
-                  <code>usePosts</code>, <code>useGeneralSettings</code> and
-                  other custom hooks. Use these hooks in your page templates to
-                  pass data to custom components. See{' '}
-                  <code>src/pages/index.tsx</code> for examples.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
         <Posts
           posts={posts.nodes}
           heading="Latest Posts"
@@ -120,9 +66,10 @@ export default function Page() {
           title="Questions or comments?"
           buttonText="Join the discussion on GitHub"
           buttonURL="https://github.com/wpengine/headless-framework/discussions"
-          headingLevel="h2">
+          headingLevel="h2"
+        >
           <p>
-            We welcome feature requests, bug reports and questions in the{' '}
+            We welcome feature requests, bug reports and questions in the{" "}
             <a href="https://github.com/wpengine/headless-framework">
               Headless Framework GitHub repository
             </a>
