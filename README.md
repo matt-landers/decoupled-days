@@ -1,14 +1,23 @@
-# Next.js Headless WordPress Getting Started Example
+# API First Development with Headless WordPress
 
-## Setup
+Matt Landers @matt_landers  
+Head of Developer Relations, StarTree (formerly WP Engine)
 
-See the [setup steps](https://github.com/wpengine/headless-framework#quick-start).
+## Agenda
 
-## Run it
+🗣️ Talky Talk  
+💣 DEMO
 
-```bash
-npm install
-npm run dev
-```
+## Why WordPress?
 
-[http://localhost:3000]()
+🕸️ +40% of the web is WordPress  
+👐 Free and Open Source!  
+🤯 Headless WordPress is **Awesome!**  
+&nbsp; &nbsp;&nbsp; 🚀 PHP is **NOT** required
+
+## Session Resources
+
+⭐ https://github.com/matt-landers/decoupleddays  
+⭐ https://github.com/wpengine/headless-framework  
+⭐ https://github.com/wpengine/atlas-content-modeler  
+🕸️ developers.wpengine.com
