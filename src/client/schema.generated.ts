@@ -525,6 +525,8 @@ export enum ContentTypeEnum {
   PAGE = "PAGE",
   /** The Type of Content object */
   POST = "POST",
+  /** The Type of Content object */
+  TEAMMEMBER = "TEAMMEMBER",
 }
 
 /** What rating to display avatars up to. Accepts 'G', 'PG', 'R', 'X', and are judged in that order. Default is the value of the 'avatar_rating' option */
@@ -2409,6 +2411,56 @@ export enum TaxonomyIdTypeEnum {
   NAME = "NAME",
 }
 
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum TeamMemberIdType {
+  /** Identify a resource by the Database ID. */
+  DATABASE_ID = "DATABASE_ID",
+  /** Identify a resource by the (hashed) Global ID. */
+  ID = "ID",
+  /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
+  SLUG = "SLUG",
+  /** Identify a resource by the URI. */
+  URI = "URI",
+}
+
+/** Arguments for filtering the RootQueryToTeamMemberConnection connection */
+export interface RootQueryToTeamMemberConnectionWhereArgs {
+  /** Filter the connection based on dates */
+  dateQuery?: Maybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: Maybe<Scalars["Boolean"]>;
+  /** Specific ID of the object */
+  id?: Maybe<Scalars["Int"]>;
+  /** Array of IDs for the objects to retrieve */
+  in?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: Maybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: Maybe<Scalars["String"]>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: Maybe<Array<Maybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: Maybe<Scalars["ID"]>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+  /** Show posts with a specific password. */
+  password?: Maybe<Scalars["String"]>;
+  /** Show Posts based on a keyword search */
+  search?: Maybe<Scalars["String"]>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: Maybe<Array<Maybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: Maybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: Maybe<Scalars["String"]>;
+}
+
 /** The Type of Identifier used to fetch a single resource. Default is "ID". To be used along with the "id" field. */
 export enum TermNodeIdTypeEnum {
   /** The Database ID for the node */
@@ -2815,6 +2867,22 @@ export interface CreateTagInput {
   slug?: Maybe<Scalars["String"]>;
 }
 
+/** Input for the createTeamMember mutation */
+export interface CreateTeamMemberInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: Maybe<Scalars["String"]>;
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: Maybe<Scalars["Int"]>;
+  /** The password used to protect the content of the object */
+  password?: Maybe<Scalars["String"]>;
+  /** The slug of the object */
+  slug?: Maybe<Scalars["String"]>;
+  /** The status of the object */
+  status?: Maybe<PostStatusEnum>;
+}
+
 /** Input for the createUser mutation */
 export interface CreateUserInput {
   /** User's AOL IM account. */
@@ -2916,6 +2984,16 @@ export interface DeleteTagInput {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars["String"]>;
   /** The ID of the tag to delete */
+  id: Scalars["ID"];
+}
+
+/** Input for the deleteTeamMember mutation */
+export interface DeleteTeamMemberInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** Whether the object should be force deleted instead of being moved to the trash */
+  forceDelete?: Maybe<Scalars["Boolean"]>;
+  /** The ID of the teamMember to delete */
   id: Scalars["ID"];
 }
 
@@ -3211,6 +3289,24 @@ export interface UpdateTagInput {
   name?: Maybe<Scalars["String"]>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: Maybe<Scalars["String"]>;
+}
+
+/** Input for the updateTeamMember mutation */
+export interface UpdateTeamMemberInput {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars["String"]>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: Maybe<Scalars["String"]>;
+  /** The ID of the teamMember object */
+  id: Scalars["ID"];
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: Maybe<Scalars["Int"]>;
+  /** The password used to protect the content of the object */
+  password?: Maybe<Scalars["String"]>;
+  /** The slug of the object */
+  slug?: Maybe<Scalars["String"]>;
+  /** The status of the object */
+  status?: Maybe<PostStatusEnum>;
 }
 
 /** Input for the updateUser mutation */
@@ -4209,6 +4305,7 @@ export const scalarsEnumsHash: import("gqless").ScalarsEnumsHash = {
   PostFormatIdType: true,
   TagIdType: true,
   TaxonomyIdTypeEnum: true,
+  TeamMemberIdType: true,
   TermNodeIdTypeEnum: true,
   UserNodeIdTypeEnum: true,
   UsersConnectionOrderbyEnum: true,
@@ -4419,6 +4516,24 @@ export const generatedSchema = {
       __type: "Taxonomy",
       __args: { id: "ID!", idType: "TaxonomyIdTypeEnum" },
     },
+    teamMember: {
+      __type: "TeamMember",
+      __args: { id: "ID!", idType: "TeamMemberIdType", asPreview: "Boolean" },
+    },
+    teamMemberBy: {
+      __type: "TeamMember",
+      __args: { id: "ID", teamMemberId: "Int", uri: "String", slug: "String" },
+    },
+    teamMembers: {
+      __type: "RootQueryToTeamMemberConnection",
+      __args: {
+        first: "Int",
+        last: "Int",
+        after: "String",
+        before: "String",
+        where: "RootQueryToTeamMemberConnectionWhereArgs",
+      },
+    },
     termNode: {
       __type: "TermNode",
       __args: {
@@ -4494,6 +4609,10 @@ export const generatedSchema = {
       __type: "CreateTagPayload",
       __args: { input: "CreateTagInput!" },
     },
+    createTeamMember: {
+      __type: "CreateTeamMemberPayload",
+      __args: { input: "CreateTeamMemberInput!" },
+    },
     createUser: {
       __type: "CreateUserPayload",
       __args: { input: "CreateUserInput!" },
@@ -4525,6 +4644,10 @@ export const generatedSchema = {
     deleteTag: {
       __type: "DeleteTagPayload",
       __args: { input: "DeleteTagInput!" },
+    },
+    deleteTeamMember: {
+      __type: "DeleteTeamMemberPayload",
+      __args: { input: "DeleteTeamMemberInput!" },
     },
     deleteUser: {
       __type: "DeleteUserPayload",
@@ -4578,6 +4701,10 @@ export const generatedSchema = {
     updateTag: {
       __type: "UpdateTagPayload",
       __args: { input: "UpdateTagInput!" },
+    },
+    updateTeamMember: {
+      __type: "UpdateTeamMemberPayload",
+      __args: { input: "UpdateTeamMemberInput!" },
     },
     updateUser: {
       __type: "UpdateUserPayload",
@@ -7319,6 +7446,82 @@ export const generatedSchema = {
     cursor: { __type: "String" },
     node: { __type: "Taxonomy" },
   },
+  TeamMember: {
+    __typename: { __type: "String!" },
+    bio: { __type: "String" },
+    conditionalTags: { __type: "ConditionalTags" },
+    contentType: { __type: "ContentNodeToContentTypeConnectionEdge" },
+    databaseId: { __type: "Int!" },
+    date: { __type: "String" },
+    dateGmt: { __type: "String" },
+    dateStarted: { __type: "String" },
+    desiredSlug: { __type: "String" },
+    editingLockedBy: { __type: "ContentNodeToEditLockConnectionEdge" },
+    enclosure: { __type: "String" },
+    enqueuedScripts: {
+      __type: "ContentNodeToEnqueuedScriptConnection",
+      __args: { first: "Int", last: "Int", after: "String", before: "String" },
+    },
+    enqueuedStylesheets: {
+      __type: "ContentNodeToEnqueuedStylesheetConnection",
+      __args: { first: "Int", last: "Int", after: "String", before: "String" },
+    },
+    guid: { __type: "String" },
+    id: { __type: "ID!" },
+    isContentNode: { __type: "Boolean!" },
+    isPreview: { __type: "Boolean" },
+    isRestricted: { __type: "Boolean" },
+    isTermNode: { __type: "Boolean!" },
+    lastEditedBy: { __type: "ContentNodeToEditLastConnectionEdge" },
+    link: { __type: "String" },
+    modified: { __type: "String" },
+    modifiedGmt: { __type: "String" },
+    name: { __type: "String" },
+    pic: { __type: "MediaItem" },
+    preview: { __type: "TeamMemberToPreviewConnectionEdge" },
+    previewRevisionDatabaseId: { __type: "Int" },
+    previewRevisionId: { __type: "ID" },
+    slug: { __type: "String" },
+    status: { __type: "String" },
+    teamMemberId: { __type: "Int!" },
+    template: { __type: "ContentTemplate" },
+    templates: { __type: "[String]" },
+    uri: { __type: "String" },
+  },
+  TeamMemberToPreviewConnectionEdge: {
+    __typename: { __type: "String!" },
+    node: { __type: "TeamMember" },
+  },
+  RootQueryToTeamMemberConnectionWhereArgs: {
+    dateQuery: { __type: "DateQueryInput" },
+    hasPassword: { __type: "Boolean" },
+    id: { __type: "Int" },
+    in: { __type: "[ID]" },
+    mimeType: { __type: "MimeTypeEnum" },
+    name: { __type: "String" },
+    nameIn: { __type: "[String]" },
+    notIn: { __type: "[ID]" },
+    orderby: { __type: "[PostObjectsConnectionOrderbyInput]" },
+    parent: { __type: "ID" },
+    parentIn: { __type: "[ID]" },
+    parentNotIn: { __type: "[ID]" },
+    password: { __type: "String" },
+    search: { __type: "String" },
+    stati: { __type: "[PostStatusEnum]" },
+    status: { __type: "PostStatusEnum" },
+    title: { __type: "String" },
+  },
+  RootQueryToTeamMemberConnection: {
+    __typename: { __type: "String!" },
+    edges: { __type: "[RootQueryToTeamMemberConnectionEdge]" },
+    nodes: { __type: "[TeamMember]" },
+    pageInfo: { __type: "WPPageInfo" },
+  },
+  RootQueryToTeamMemberConnectionEdge: {
+    __typename: { __type: "String!" },
+    cursor: { __type: "String" },
+    node: { __type: "TeamMember" },
+  },
   RootQueryToTermNodeConnectionWhereArgs: {
     cacheDomain: { __type: "String" },
     childOf: { __type: "Int" },
@@ -7577,6 +7780,19 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     tag: { __type: "Tag" },
   },
+  CreateTeamMemberInput: {
+    clientMutationId: { __type: "String" },
+    date: { __type: "String" },
+    menuOrder: { __type: "Int" },
+    password: { __type: "String" },
+    slug: { __type: "String" },
+    status: { __type: "PostStatusEnum" },
+  },
+  CreateTeamMemberPayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    teamMember: { __type: "TeamMember" },
+  },
   CreateUserInput: {
     aim: { __type: "String" },
     clientMutationId: { __type: "String" },
@@ -7675,6 +7891,17 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     deletedId: { __type: "ID" },
     tag: { __type: "Tag" },
+  },
+  DeleteTeamMemberInput: {
+    clientMutationId: { __type: "String" },
+    forceDelete: { __type: "Boolean" },
+    id: { __type: "ID!" },
+  },
+  DeleteTeamMemberPayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    deletedId: { __type: "ID" },
+    teamMember: { __type: "TeamMember" },
   },
   DeleteUserInput: {
     clientMutationId: { __type: "String" },
@@ -7895,6 +8122,20 @@ export const generatedSchema = {
     clientMutationId: { __type: "String" },
     tag: { __type: "Tag" },
   },
+  UpdateTeamMemberInput: {
+    clientMutationId: { __type: "String" },
+    date: { __type: "String" },
+    id: { __type: "ID!" },
+    menuOrder: { __type: "Int" },
+    password: { __type: "String" },
+    slug: { __type: "String" },
+    status: { __type: "PostStatusEnum" },
+  },
+  UpdateTeamMemberPayload: {
+    __typename: { __type: "String!" },
+    clientMutationId: { __type: "String" },
+    teamMember: { __type: "TeamMember" },
+  },
   UpdateUserInput: {
     aim: { __type: "String" },
     clientMutationId: { __type: "String" },
@@ -7944,7 +8185,7 @@ export const generatedSchema = {
   [SchemaUnionsKey]: {
     ContentRevisionUnion: ["Post", "Page"],
     MenuItemObjectUnion: ["Post", "Page", "Category", "Tag"],
-    PostObjectUnion: ["Post", "Page", "MediaItem"],
+    PostObjectUnion: ["Post", "Page", "MediaItem", "TeamMember"],
     TermObjectUnion: ["Category", "Tag", "PostFormat"],
   },
 } as const;
@@ -8131,6 +8372,24 @@ export interface Query {
     id: Scalars["ID"];
     idType?: Maybe<TaxonomyIdTypeEnum>;
   }) => Maybe<Taxonomy>;
+  teamMember: (args: {
+    id: Scalars["ID"];
+    idType?: Maybe<TeamMemberIdType>;
+    asPreview?: Maybe<Scalars["Boolean"]>;
+  }) => Maybe<TeamMember>;
+  teamMemberBy: (args?: {
+    id?: Maybe<Scalars["ID"]>;
+    teamMemberId?: Maybe<Scalars["Int"]>;
+    uri?: Maybe<Scalars["String"]>;
+    slug?: Maybe<Scalars["String"]>;
+  }) => Maybe<TeamMember>;
+  teamMembers: (args?: {
+    first?: Maybe<Scalars["Int"]>;
+    last?: Maybe<Scalars["Int"]>;
+    after?: Maybe<Scalars["String"]>;
+    before?: Maybe<Scalars["String"]>;
+    where?: Maybe<RootQueryToTeamMemberConnectionWhereArgs>;
+  }) => Maybe<RootQueryToTeamMemberConnection>;
   termNode: (args: {
     id: Scalars["ID"];
     idType?: Maybe<TermNodeIdTypeEnum>;
@@ -8189,6 +8448,9 @@ export interface Mutation {
     input: CreatePostFormatInput;
   }) => Maybe<CreatePostFormatPayload>;
   createTag: (args: { input: CreateTagInput }) => Maybe<CreateTagPayload>;
+  createTeamMember: (args: {
+    input: CreateTeamMemberInput;
+  }) => Maybe<CreateTeamMemberPayload>;
   createUser: (args: { input: CreateUserInput }) => Maybe<CreateUserPayload>;
   deleteCategory: (args: {
     input: DeleteCategoryInput;
@@ -8205,6 +8467,9 @@ export interface Mutation {
     input: DeletePostFormatInput;
   }) => Maybe<DeletePostFormatPayload>;
   deleteTag: (args: { input: DeleteTagInput }) => Maybe<DeleteTagPayload>;
+  deleteTeamMember: (args: {
+    input: DeleteTeamMemberInput;
+  }) => Maybe<DeleteTeamMemberPayload>;
   deleteUser: (args: { input: DeleteUserInput }) => Maybe<DeleteUserPayload>;
   increaseCount: (args?: {
     count?: Maybe<Scalars["Int"]>;
@@ -8239,6 +8504,9 @@ export interface Mutation {
     input: UpdateSettingsInput;
   }) => Maybe<UpdateSettingsPayload>;
   updateTag: (args: { input: UpdateTagInput }) => Maybe<UpdateTagPayload>;
+  updateTeamMember: (args: {
+    input: UpdateTeamMemberInput;
+  }) => Maybe<UpdateTeamMemberPayload>;
   updateUser: (args: { input: UpdateUserInput }) => Maybe<UpdateUserPayload>;
 }
 
@@ -14116,6 +14384,212 @@ export interface RootQueryToTaxonomyConnectionEdge {
 }
 
 /**
+ * The teamMember type
+ */
+export interface TeamMember
+  extends Omit<Node, "__typename">,
+    Omit<ContentNode, "__typename">,
+    Omit<UniformResourceIdentifiable, "__typename">,
+    Omit<DatabaseIdentifier, "__typename">,
+    Omit<NodeWithTemplate, "__typename"> {
+  __typename: "TeamMember" | undefined;
+  bio?: Maybe<ScalarsEnums["String"]>;
+  conditionalTags?: Maybe<ConditionalTags>;
+  /**
+   * Connection between the ContentNode type and the ContentType type
+   */
+  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
+  /**
+   * The unique identifier stored in the database
+   */
+  databaseId: ScalarsEnums["Int"];
+  /**
+   * Post publishing date.
+   */
+  date?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The publishing date set in GMT.
+   */
+  dateGmt?: Maybe<ScalarsEnums["String"]>;
+  dateStarted?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The desired slug of the post
+   */
+  desiredSlug?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
+   */
+  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
+  /**
+   * The RSS enclosure for the object
+   */
+  enclosure?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * Connection between the ContentNode type and the EnqueuedScript type
+   */
+  enqueuedScripts: (args?: {
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */;
+    last?: Maybe<Scalars["Int"]>
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */;
+    after?: Maybe<Scalars["String"]>
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */;
+    before?: Maybe<Scalars["String"]>;
+  }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
+  /**
+   * Connection between the ContentNode type and the EnqueuedStylesheet type
+   */
+  enqueuedStylesheets: (args?: {
+    /**
+     * The number of items to return after the referenced "after" cursor
+     */
+    first?: Maybe<Scalars["Int"]>
+    /**
+     * The number of items to return before the referenced "before" cursor
+     */;
+    last?: Maybe<Scalars["Int"]>
+    /**
+     * Cursor used along with the "first" argument to reference where in the dataset to get data
+     */;
+    after?: Maybe<Scalars["String"]>
+    /**
+     * Cursor used along with the "last" argument to reference where in the dataset to get data
+     */;
+    before?: Maybe<Scalars["String"]>;
+  }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
+  /**
+   * The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+   */
+  guid?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The globally unique identifier of the teammember object.
+   */
+  id: ScalarsEnums["ID"];
+  /**
+   * Whether the node is a Content Node
+   */
+  isContentNode: ScalarsEnums["Boolean"];
+  /**
+   * Whether the object is a node in the preview state
+   */
+  isPreview?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * Whether the object is restricted from the current viewer
+   */
+  isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
+  /**
+   * Whether the node is a Term
+   */
+  isTermNode: ScalarsEnums["Boolean"];
+  /**
+   * The user that most recently edited the node
+   */
+  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
+  /**
+   * The permalink of the post
+   */
+  link?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
+   */
+  modified?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
+   */
+  modifiedGmt?: Maybe<ScalarsEnums["String"]>;
+  name?: Maybe<ScalarsEnums["String"]>;
+  pic?: Maybe<MediaItem>;
+  /**
+   * Connection between the teamMember type and the teamMember type
+   */
+  preview?: Maybe<TeamMemberToPreviewConnectionEdge>;
+  /**
+   * The database id of the preview node
+   */
+  previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
+  /**
+   * Whether the object is a node in the preview state
+   */
+  previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+   */
+  slug?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The current status of the object
+   */
+  status?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The id field matches the WP_Post-&gt;ID field.
+   * @deprecated Deprecated in favor of the databaseId field
+   */
+  teamMemberId: ScalarsEnums["Int"];
+  /**
+   * The template assigned to the node
+   */
+  template?: Maybe<ContentTemplate>;
+  templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+  /**
+   * The unique resource identifier path
+   */
+  uri?: Maybe<ScalarsEnums["String"]>;
+}
+
+/**
+ * Connection between the teamMember type and the teamMember type
+ */
+export interface TeamMemberToPreviewConnectionEdge {
+  __typename: "TeamMemberToPreviewConnectionEdge" | undefined;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  node?: Maybe<TeamMember>;
+}
+
+/**
+ * Connection between the RootQuery type and the teamMember type
+ */
+export interface RootQueryToTeamMemberConnection {
+  __typename: "RootQueryToTeamMemberConnection" | undefined;
+  /**
+   * Edges for the RootQueryToTeamMemberConnection connection
+   */
+  edges?: Maybe<Array<Maybe<RootQueryToTeamMemberConnectionEdge>>>;
+  /**
+   * The nodes of the connection, without the edges
+   */
+  nodes?: Maybe<Array<Maybe<TeamMember>>>;
+  /**
+   * Information about pagination in a connection.
+   */
+  pageInfo?: Maybe<WPPageInfo>;
+}
+
+/**
+ * An edge in a connection
+ */
+export interface RootQueryToTeamMemberConnectionEdge {
+  __typename: "RootQueryToTeamMemberConnectionEdge" | undefined;
+  /**
+   * A cursor for use in pagination
+   */
+  cursor?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The item at the end of the edge
+   */
+  node?: Maybe<TeamMember>;
+}
+
+/**
  * Connection between the RootQuery type and the TermNode type
  */
 export interface RootQueryToTermNodeConnection {
@@ -14431,6 +14905,21 @@ export interface CreateTagPayload {
 }
 
 /**
+ * The payload for the createTeamMember mutation
+ */
+export interface CreateTeamMemberPayload {
+  __typename: "CreateTeamMemberPayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Post object mutation type.
+   */
+  teamMember?: Maybe<TeamMember>;
+}
+
+/**
  * The payload for the createUser mutation
  */
 export interface CreateUserPayload {
@@ -14576,6 +15065,25 @@ export interface DeleteTagPayload {
    * The deteted term object
    */
   tag?: Maybe<Tag>;
+}
+
+/**
+ * The payload for the deleteTeamMember mutation
+ */
+export interface DeleteTeamMemberPayload {
+  __typename: "DeleteTeamMemberPayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The ID of the deleted object
+   */
+  deletedId?: Maybe<ScalarsEnums["ID"]>;
+  /**
+   * The object before it was deleted
+   */
+  teamMember?: Maybe<TeamMember>;
 }
 
 /**
@@ -14799,6 +15307,21 @@ export interface UpdateTagPayload {
    * The created post_tag
    */
   tag?: Maybe<Tag>;
+}
+
+/**
+ * The payload for the updateTeamMember mutation
+ */
+export interface UpdateTeamMemberPayload {
+  __typename: "UpdateTeamMemberPayload" | undefined;
+  /**
+   * If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+   */
+  clientMutationId?: Maybe<ScalarsEnums["String"]>;
+  /**
+   * The Post object mutation type.
+   */
+  teamMember?: Maybe<TeamMember>;
 }
 
 /**
@@ -15048,6 +15571,10 @@ export interface SchemaObjectTypes {
   RootQueryToTagConnectionEdge: RootQueryToTagConnectionEdge;
   RootQueryToTaxonomyConnection: RootQueryToTaxonomyConnection;
   RootQueryToTaxonomyConnectionEdge: RootQueryToTaxonomyConnectionEdge;
+  TeamMember: TeamMember;
+  TeamMemberToPreviewConnectionEdge: TeamMemberToPreviewConnectionEdge;
+  RootQueryToTeamMemberConnection: RootQueryToTeamMemberConnection;
+  RootQueryToTeamMemberConnectionEdge: RootQueryToTeamMemberConnectionEdge;
   RootQueryToTermNodeConnection: RootQueryToTermNodeConnection;
   RootQueryToTermNodeConnectionEdge: RootQueryToTermNodeConnectionEdge;
   Theme: Theme;
@@ -15065,6 +15592,7 @@ export interface SchemaObjectTypes {
   CreatePostPayload: CreatePostPayload;
   CreatePostFormatPayload: CreatePostFormatPayload;
   CreateTagPayload: CreateTagPayload;
+  CreateTeamMemberPayload: CreateTeamMemberPayload;
   CreateUserPayload: CreateUserPayload;
   DeleteCategoryPayload: DeleteCategoryPayload;
   DeleteCommentPayload: DeleteCommentPayload;
@@ -15073,6 +15601,7 @@ export interface SchemaObjectTypes {
   DeletePostPayload: DeletePostPayload;
   DeletePostFormatPayload: DeletePostFormatPayload;
   DeleteTagPayload: DeleteTagPayload;
+  DeleteTeamMemberPayload: DeleteTeamMemberPayload;
   DeleteUserPayload: DeleteUserPayload;
   RegisterUserPayload: RegisterUserPayload;
   ResetUserPasswordPayload: ResetUserPasswordPayload;
@@ -15086,6 +15615,7 @@ export interface SchemaObjectTypes {
   UpdatePostFormatPayload: UpdatePostFormatPayload;
   UpdateSettingsPayload: UpdateSettingsPayload;
   UpdateTagPayload: UpdateTagPayload;
+  UpdateTeamMemberPayload: UpdateTeamMemberPayload;
   UpdateUserPayload: UpdateUserPayload;
   CommentAuthor: CommentAuthor;
   DefaultTemplate: DefaultTemplate;
@@ -15267,6 +15797,10 @@ export type SchemaObjectTypesNames =
   | "RootQueryToTagConnectionEdge"
   | "RootQueryToTaxonomyConnection"
   | "RootQueryToTaxonomyConnectionEdge"
+  | "TeamMember"
+  | "TeamMemberToPreviewConnectionEdge"
+  | "RootQueryToTeamMemberConnection"
+  | "RootQueryToTeamMemberConnectionEdge"
   | "RootQueryToTermNodeConnection"
   | "RootQueryToTermNodeConnectionEdge"
   | "Theme"
@@ -15284,6 +15818,7 @@ export type SchemaObjectTypesNames =
   | "CreatePostPayload"
   | "CreatePostFormatPayload"
   | "CreateTagPayload"
+  | "CreateTeamMemberPayload"
   | "CreateUserPayload"
   | "DeleteCategoryPayload"
   | "DeleteCommentPayload"
@@ -15292,6 +15827,7 @@ export type SchemaObjectTypesNames =
   | "DeletePostPayload"
   | "DeletePostFormatPayload"
   | "DeleteTagPayload"
+  | "DeleteTeamMemberPayload"
   | "DeleteUserPayload"
   | "RegisterUserPayload"
   | "ResetUserPasswordPayload"
@@ -15305,6 +15841,7 @@ export type SchemaObjectTypesNames =
   | "UpdatePostFormatPayload"
   | "UpdateSettingsPayload"
   | "UpdateTagPayload"
+  | "UpdateTeamMemberPayload"
   | "UpdateUserPayload"
   | "CommentAuthor"
   | "DefaultTemplate"
@@ -17315,6 +17852,7 @@ export type PostObjectUnion =
        * The globally unique identifier of the author of the node
        */
       authorId?: Maybe<ScalarsEnums["ID"]>;
+      bio?: undefined;
       caption?: undefined;
       /**
        * Connection between the post type and the category type
@@ -17401,6 +17939,7 @@ export type PostObjectUnion =
        * The publishing date set in GMT.
        */
       dateGmt?: Maybe<ScalarsEnums["String"]>;
+      dateStarted?: undefined;
       description?: undefined;
       /**
        * The desired slug of the post
@@ -17535,10 +18074,12 @@ export type PostObjectUnion =
        * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
        */
       modifiedGmt?: Maybe<ScalarsEnums["String"]>;
+      name?: undefined;
       pageId?: undefined;
       parent?: undefined;
       parentDatabaseId?: undefined;
       parentId?: undefined;
+      pic?: undefined;
       /**
        * Whether the pings are open or closed for this particular post.
        */
@@ -17654,6 +18195,7 @@ export type PostObjectUnion =
          */;
         where?: Maybe<PostToTagConnectionWhereArgs>;
       }) => Maybe<PostToTagConnection>;
+      teamMemberId?: undefined;
       /**
        * The template assigned to the node
        */
@@ -17742,6 +18284,7 @@ export type PostObjectUnion =
        * The globally unique identifier of the author of the node
        */
       authorId?: Maybe<ScalarsEnums["ID"]>;
+      bio?: undefined;
       caption?: undefined;
       categories?: undefined;
       /**
@@ -17828,6 +18371,7 @@ export type PostObjectUnion =
        * The publishing date set in GMT.
        */
       dateGmt?: Maybe<ScalarsEnums["String"]>;
+      dateStarted?: undefined;
       description?: undefined;
       /**
        * The desired slug of the post
@@ -17971,6 +18515,7 @@ export type PostObjectUnion =
        * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
        */
       modifiedGmt?: Maybe<ScalarsEnums["String"]>;
+      name?: undefined;
       /**
        * The id field matches the WP_Post-&gt;ID field.
        * @deprecated Deprecated in favor of the databaseId field
@@ -17988,6 +18533,7 @@ export type PostObjectUnion =
        * The globally unique identifier of the parent node.
        */
       parentId?: Maybe<ScalarsEnums["ID"]>;
+      pic?: undefined;
       pingStatus?: undefined;
       pinged?: undefined;
       postFormats?: undefined;
@@ -18045,6 +18591,7 @@ export type PostObjectUnion =
        */
       status?: Maybe<ScalarsEnums["String"]>;
       tags?: undefined;
+      teamMemberId?: undefined;
       /**
        * The template assigned to the node
        */
@@ -18109,6 +18656,7 @@ export type PostObjectUnion =
        * The globally unique identifier of the author of the node
        */
       authorId?: Maybe<ScalarsEnums["ID"]>;
+      bio?: undefined;
       /**
        * The caption for the resource
        */
@@ -18195,6 +18743,7 @@ export type PostObjectUnion =
        * The publishing date set in GMT.
        */
       dateGmt?: Maybe<ScalarsEnums["String"]>;
+      dateStarted?: undefined;
       /**
        * Description of the image (stored as post_content)
        */
@@ -18338,6 +18887,7 @@ export type PostObjectUnion =
        * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
        */
       modifiedGmt?: Maybe<ScalarsEnums["String"]>;
+      name?: undefined;
       pageId?: undefined;
       /**
        * The parent of the node. The parent object can be of various types
@@ -18351,6 +18901,7 @@ export type PostObjectUnion =
        * The globally unique identifier of the parent node.
        */
       parentId?: Maybe<ScalarsEnums["ID"]>;
+      pic?: undefined;
       pingStatus?: undefined;
       pinged?: undefined;
       postFormats?: undefined;
@@ -18402,6 +18953,7 @@ export type PostObjectUnion =
        */
       status?: Maybe<ScalarsEnums["String"]>;
       tags?: undefined;
+      teamMemberId?: undefined;
       /**
        * The template assigned to the node
        */
@@ -18417,6 +18969,204 @@ export type PostObjectUnion =
          */
         format?: Maybe<PostObjectFieldFormatEnum>;
       }) => Maybe<ScalarsEnums["String"]>;
+      toPing?: undefined;
+      /**
+       * The unique resource identifier path
+       */
+      uri?: Maybe<ScalarsEnums["String"]>;
+    }
+  | {
+      __typename: "TeamMember" | undefined;
+      altText?: undefined;
+      ancestors?: undefined;
+      author?: undefined;
+      authorDatabaseId?: undefined;
+      authorId?: undefined;
+      bio?: Maybe<ScalarsEnums["String"]>;
+      caption?: undefined;
+      categories?: undefined;
+      children?: undefined;
+      commentCount?: undefined;
+      commentStatus?: undefined;
+      comments?: undefined;
+      conditionalTags?: Maybe<ConditionalTags>;
+      content?: undefined;
+      /**
+       * Connection between the ContentNode type and the ContentType type
+       */
+      contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
+      /**
+       * The unique identifier stored in the database
+       */
+      databaseId: ScalarsEnums["Int"];
+      /**
+       * Post publishing date.
+       */
+      date?: Maybe<ScalarsEnums["String"]>;
+      /**
+       * The publishing date set in GMT.
+       */
+      dateGmt?: Maybe<ScalarsEnums["String"]>;
+      dateStarted?: Maybe<ScalarsEnums["String"]>;
+      description?: undefined;
+      /**
+       * The desired slug of the post
+       */
+      desiredSlug?: Maybe<ScalarsEnums["String"]>;
+      /**
+       * If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds
+       */
+      editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
+      /**
+       * The RSS enclosure for the object
+       */
+      enclosure?: Maybe<ScalarsEnums["String"]>;
+      /**
+       * Connection between the ContentNode type and the EnqueuedScript type
+       */
+      enqueuedScripts: (args?: {
+        /**
+         * The number of items to return after the referenced "after" cursor
+         */
+        first?: Maybe<Scalars["Int"]>
+        /**
+         * The number of items to return before the referenced "before" cursor
+         */;
+        last?: Maybe<Scalars["Int"]>
+        /**
+         * Cursor used along with the "first" argument to reference where in the dataset to get data
+         */;
+        after?: Maybe<Scalars["String"]>
+        /**
+         * Cursor used along with the "last" argument to reference where in the dataset to get data
+         */;
+        before?: Maybe<Scalars["String"]>;
+      }) => Maybe<ContentNodeToEnqueuedScriptConnection>;
+      /**
+       * Connection between the ContentNode type and the EnqueuedStylesheet type
+       */
+      enqueuedStylesheets: (args?: {
+        /**
+         * The number of items to return after the referenced "after" cursor
+         */
+        first?: Maybe<Scalars["Int"]>
+        /**
+         * The number of items to return before the referenced "before" cursor
+         */;
+        last?: Maybe<Scalars["Int"]>
+        /**
+         * Cursor used along with the "first" argument to reference where in the dataset to get data
+         */;
+        after?: Maybe<Scalars["String"]>
+        /**
+         * Cursor used along with the "last" argument to reference where in the dataset to get data
+         */;
+        before?: Maybe<Scalars["String"]>;
+      }) => Maybe<ContentNodeToEnqueuedStylesheetConnection>;
+      excerpt?: undefined;
+      featuredImage?: undefined;
+      featuredImageDatabaseId?: undefined;
+      featuredImageId?: undefined;
+      fileSize?: undefined;
+      /**
+       * The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+       */
+      guid?: Maybe<ScalarsEnums["String"]>;
+      /**
+       * The globally unique identifier of the teammember object.
+       */
+      id: ScalarsEnums["ID"];
+      /**
+       * Whether the node is a Content Node
+       */
+      isContentNode: ScalarsEnums["Boolean"];
+      isFrontPage?: undefined;
+      isPostsPage?: undefined;
+      /**
+       * Whether the object is a node in the preview state
+       */
+      isPreview?: Maybe<ScalarsEnums["Boolean"]>;
+      isPrivacyPage?: undefined;
+      /**
+       * Whether the object is restricted from the current viewer
+       */
+      isRestricted?: Maybe<ScalarsEnums["Boolean"]>;
+      isRevision?: undefined;
+      isSticky?: undefined;
+      /**
+       * Whether the node is a Term
+       */
+      isTermNode: ScalarsEnums["Boolean"];
+      /**
+       * The user that most recently edited the node
+       */
+      lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
+      /**
+       * The permalink of the post
+       */
+      link?: Maybe<ScalarsEnums["String"]>;
+      mediaDetails?: undefined;
+      mediaItemId?: undefined;
+      mediaItemUrl?: undefined;
+      mediaType?: undefined;
+      menuOrder?: undefined;
+      mimeType?: undefined;
+      /**
+       * The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time.
+       */
+      modified?: Maybe<ScalarsEnums["String"]>;
+      /**
+       * The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
+       */
+      modifiedGmt?: Maybe<ScalarsEnums["String"]>;
+      name?: Maybe<ScalarsEnums["String"]>;
+      pageId?: undefined;
+      parent?: undefined;
+      parentDatabaseId?: undefined;
+      parentId?: undefined;
+      pic?: Maybe<MediaItem>;
+      pingStatus?: undefined;
+      pinged?: undefined;
+      postFormats?: undefined;
+      postId?: undefined;
+      /**
+       * Connection between the teamMember type and the teamMember type
+       */
+      preview?: Maybe<TeamMemberToPreviewConnectionEdge>;
+      /**
+       * The database id of the preview node
+       */
+      previewRevisionDatabaseId?: Maybe<ScalarsEnums["Int"]>;
+      /**
+       * Whether the object is a node in the preview state
+       */
+      previewRevisionId?: Maybe<ScalarsEnums["ID"]>;
+      revisionOf?: undefined;
+      revisions?: undefined;
+      sizes?: undefined;
+      /**
+       * The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+       */
+      slug?: Maybe<ScalarsEnums["String"]>;
+      sourceUrl?: undefined;
+      srcSet?: undefined;
+      /**
+       * The current status of the object
+       */
+      status?: Maybe<ScalarsEnums["String"]>;
+      tags?: undefined;
+      /**
+       * The id field matches the WP_Post-&gt;ID field.
+       * @deprecated Deprecated in favor of the databaseId field
+       */
+      teamMemberId: ScalarsEnums["Int"];
+      /**
+       * The template assigned to the node
+       */
+      template?: Maybe<ContentTemplate>;
+      templates?: Maybe<Array<Maybe<ScalarsEnums["String"]>>>;
+      terms?: undefined;
+      title?: undefined;
       toPing?: undefined;
       /**
        * The unique resource identifier path
@@ -19446,6 +20196,7 @@ export interface ScalarsEnums extends MakeNullable<Scalars> {
   PostFormatIdType: PostFormatIdType | undefined;
   TagIdType: TagIdType | undefined;
   TaxonomyIdTypeEnum: TaxonomyIdTypeEnum | undefined;
+  TeamMemberIdType: TeamMemberIdType | undefined;
   TermNodeIdTypeEnum: TermNodeIdTypeEnum | undefined;
   UserNodeIdTypeEnum: UserNodeIdTypeEnum | undefined;
   UsersConnectionOrderbyEnum: UsersConnectionOrderbyEnum | undefined;
