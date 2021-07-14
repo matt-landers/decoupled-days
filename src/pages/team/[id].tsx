@@ -2,14 +2,17 @@ import { Header, Footer } from "components";
 import Head from "next/head";
 import React from "react";
 import { client } from "client";
-
 import styles from "scss/pages/team.module.scss";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Team = () => {
+  const router = useRouter();
+  const id = router.query.id as string;
+
   const query = client.useQuery();
   const generalSettings = query.generalSettings;
-  const teamMembers = query.teamMembers().nodes;
+  const teamMember = query.teamMemberBy({ id });
 
   return (
     <>
@@ -24,22 +27,9 @@ const Team = () => {
         </title>
       </Head>
       <div className={`wrap ${styles.team}`}>
-        <h1>Team</h1>
-        <ul>
-          {teamMembers.map((teamMember) => (
-            <li>
-              <Link href={`/team/${teamMember.id}`}>
-                <a href={`/team/${teamMember.id}`}>
-                  <img
-                    src={teamMember.pic.mediaItemUrl}
-                    alt={teamMember.name}
-                  />
-                  <h2>{teamMember.name}</h2>
-                </a>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <h1>{teamMember.name}</h1>
+        <img src={teamMember.pic.mediaItemUrl} alt={teamMember.name} />
+        <div dangerouslySetInnerHTML={{ __html: teamMember.bio }} />
       </div>
 
       <Footer copyrightHolder={generalSettings.title} />
