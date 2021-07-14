@@ -8,16 +8,15 @@ Head of Developer Relations, StarTree (formerly WP Engine)
 🗣️ Talky Talk  
 💣 DEMO
 
-## Why WordPress?
+## API-First Development
 
-🕸️ +40% of the web is WordPress  
-👐 Free and Open Source!  
-🤯 Headless WordPress is **Awesome!**  
-&nbsp; &nbsp;&nbsp; 🚀 PHP is **NOT** required
+🥇 Data First  
+🧱 Structured Content  
+🚀 PHP is **NOT** required
 
 ## Session Resources
 
 ⭐ https://github.com/matt-landers/decoupleddays  
 ⭐ https://github.com/wpengine/headless-framework  
 ⭐ https://github.com/wpengine/atlas-content-modeler  
-🕸️ developers.wpengine.com
+
