@@ -27,7 +27,7 @@ const Team = () => {
         <h1>Team</h1>
         <ul>
           {teamMembers.map((teamMember) => (
-            <li>
+            <li key={teamMember.id}>
               <Link href={`/team/${teamMember.id}`}>
                 <a href={`/team/${teamMember.id}`}>
                   <img
